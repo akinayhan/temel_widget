@@ -4,6 +4,7 @@ void main() {
   runApp(MaterialApp(home: MyApp()));
 }
 
+
 class MyApp extends StatelessWidget {
   String mesaj = "Merhaba ilk uygulamam!";
   @override
