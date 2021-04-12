@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
                     return Text(ogrenciler[index]);
                   })),
           Center(
+            // ignore: deprecated_member_use
             child: RaisedButton(
               child: Text("Sonucu gör"),
               onPressed: () {
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
 
   String sinavHesapla(int puan) {
     String mesaj = "";
