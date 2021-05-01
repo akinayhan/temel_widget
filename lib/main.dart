@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:temel_widget/models/student.dart';
+import 'package:temel_widget/screens/student_add.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -14,42 +14,26 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String mesaj = "Öğrenci Takip Sistemi";
 
-  String seciliOgrenci = "ABC ";
+  Student selectedStudent=Student.withId(0, "", "", 0);
 
-  List<Student> students = [Student("Akın","Ayhan",25),Student("Burak", "Dinç", 65),Student("Çağrı","Tunç",45)];
-
-  var ogrenciler = ["Akın Ayhan",
-    "Burak Dinç",
-    "Çağrı Tunç",
-    "Osman Gül"
+  List<Student> students = [
+    Student.withId(1,"Akın", "Ayhan", 25),
+    Student.withId(2,"Burak", "Dinç", 65),
+    Student.withId(3,"Çağrı", "Tunç", 45)
   ];
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(mesaj),
-      ),
-      body: buildBody(context)
-    );
-  }
-
-  String sinavHesapla(int puan) {
-    String mesaj = "";
-    if (puan >= 50) {
-      mesaj = "Geçti";
-    } else if (puan >= 40) {
-      mesaj = "Bütünlemeye kaldı";
-    } else {
-      mesaj = "Kaldı";
-    }
-    return mesaj;
+        appBar: AppBar(
+          title: Text(mesaj),
+        ),
+        body: buildBody(context));
   }
 
   void mesajGoster(BuildContext context, String mesaj) {
     var alert = AlertDialog(
-      title: Text("Sınav Sonucu"),
+      title: Text("İşlem Sonucu"),
       content: Text(mesaj),
     );
     showDialog(context: context, builder: (BuildContext) => alert);
@@ -64,34 +48,94 @@ class _MyAppState extends State<MyApp> {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage("https://cdn.pixabay.com/photo/2018/06/27/07/45/student-3500990_960_720.jpg"),
+                      backgroundImage: NetworkImage(
+                          "https://cdn.pixabay.com/photo/2018/06/27/07/45/student-3500990_960_720.jpg"),
                     ),
-                    title: Text(students[index].firstName + " " + students[index].lastName),
-                    subtitle: Text("Sınavdan aldığı not: " + students[index].grade.toString() + " ["+students[index].getStatus+"]"),
+                    title: Text(students[index].firstName +
+                        " " +
+                        students[index].lastName),
+                    subtitle: Text("Sınavdan aldığı not: " +
+                        students[index].grade.toString() +
+                        " [" +
+                        students[index].getStatus +
+                        "]"),
                     trailing: buildStatusIcon(students[index].grade),
-                    onTap: (){
+                    onTap: () {
                       setState(() {
-                        seciliOgrenci = students[index].firstName + " " + students[index].lastName;
+                        selectedStudent = students[index];
                       });
 
-                      print(seciliOgrenci);
+                      print(selectedStudent.firstName);
                     },
                   );
                 })),
-        Text("Seçili öğrenci : " + seciliOgrenci),
-        Center(
-          // ignore: deprecated_member_use
-          child: RaisedButton(
-            child: Text("Sonucu gör !!!"),
-            onPressed: () {
-              var mesaj = sinavHesapla(55);
-              mesajGoster(context,mesaj);
-            },
-          ),
-        ),
+        Text("Seçili öğrenci : " + selectedStudent.firstName),
+        Row(
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.tight,
+              flex: 2,
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                color: Colors.greenAccent,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.add),
+                    SizedBox(width: 5.0,),
+                    Text("Yeni öğrenci"),
+                  ],
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentAdd()));
+                },
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              flex: 2,
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                color: Colors.amberAccent,
+                child: Row(
+                  children: <Widget> [
+                    Icon(Icons.update),
+                    SizedBox(width: 5.0,),
+                    Text("Güncelle"),
+                  ],
+                ),
+                onPressed: () {
+                  var mesaj = "Güncellendi";
+                  mesajGoster(context, mesaj);
+                },
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              flex: 1,
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                color: Colors.redAccent,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.delete),
+                    SizedBox(width: 5.0,),
+                    Text("Sil"),
+                  ],
+                ),
+                onPressed: () {
+                  setState(() {
+                    students.remove(selectedStudent);
+                  });
+
+                  var mesaj = "Silindi : " + selectedStudent.firstName ;
+                  mesajGoster(context, mesaj);
+                },
+              ),
+            )
+          ],
+        )
       ],
     );
-
   }
 
   Widget buildStatusIcon(int grade) {
