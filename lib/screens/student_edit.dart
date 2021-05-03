@@ -2,24 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:temel_widget/models/student.dart';
 import 'package:temel_widget/validation/student_validation.dart';
 
-class StudentAdd extends StatefulWidget {
-  List<Student> students;
-  StudentAdd(List<Student> students){
-    this.students = students;
+class StudentEdit extends StatefulWidget {
+  Student selectedStudent;
+  StudentEdit(Student selectedStudent){
+    this.selectedStudent = selectedStudent;
   }
   @override
   State<StatefulWidget> createState() {
-    return _StudentAddState(students);
+    return _StudentAddState(selectedStudent);
   }
 }
 
 class _StudentAddState extends State with StudentValidationMixin {
-  List<Student> students;
-  var student = Student.withoutInfo();
+  Student selectedStudent;
   var formKey = GlobalKey<FormState>();
 
-  _StudentAddState(List<Student> students){
-    this.students = students;
+  _StudentAddState(Student selectedStudent){
+    this.selectedStudent = selectedStudent;
   }
 
   @override
@@ -48,28 +47,31 @@ class _StudentAddState extends State with StudentValidationMixin {
 
   Widget buildFirstNameField() {
     return TextFormField(
+      initialValue: selectedStudent.firstName,
       decoration: InputDecoration(labelText: "Öğrenci Adı", hintText: "Akın"),
       validator: validateFirstName,
       onSaved: (String value){
-        student.firstName = value;
+        selectedStudent.firstName = value;
       },
     );
   }
   Widget buildLastNameField() {
     return TextFormField(
+      initialValue: selectedStudent.lastName,
       decoration: InputDecoration(labelText: "Öğrenci Soyadı", hintText: "Ayhan"),
       validator: validateLastName,
       onSaved: (String value){
-        student.lastName = value;
+        selectedStudent.lastName = value;
       },
     );
   }
   Widget buildGradeNameField() {
     return TextFormField(
+      initialValue: selectedStudent.grade.toString(),
       decoration: InputDecoration(labelText: "Aldığı Not", hintText: "65"),
       validator: validateGradeName,
       onSaved: (String value){
-        student.grade = int.parse(value);
+        selectedStudent.grade = int.parse(value);
       },
     );
   }
@@ -80,7 +82,6 @@ class _StudentAddState extends State with StudentValidationMixin {
       onPressed: (){
         if(formKey.currentState.validate()){
           formKey.currentState.save();
-          students.add(student);
           saveStudent();
           Navigator.pop(context);
         }
@@ -89,9 +90,9 @@ class _StudentAddState extends State with StudentValidationMixin {
   }
 
   void saveStudent() {
-    print(student.firstName);
-    print(student.lastName);
-    print(student.grade);
+    print(selectedStudent.firstName);
+    print(selectedStudent.lastName);
+    print(selectedStudent.grade);
   }
 }
 

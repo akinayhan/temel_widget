@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:temel_widget/models/student.dart';
 import 'package:temel_widget/screens/student_add.dart';
+import 'package:temel_widget/screens/student_edit.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -28,7 +29,8 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text(mesaj),
         ),
-        body: buildBody(context));
+        body: buildBody(context)
+    );
   }
 
   void mesajGoster(BuildContext context, String mesaj) {
@@ -81,44 +83,47 @@ class _MyAppState extends State<MyApp> {
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.add),
-                    SizedBox(width: 5.0,),
+                    SizedBox(
+                      width: 5.0,
+                    ),
                     Text("Yeni öğrenci"),
                   ],
                 ),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentAdd()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentAdd(students)));
                 },
               ),
             ),
             Flexible(
               fit: FlexFit.tight,
               flex: 2,
-              // ignore: deprecated_member_use
               child: RaisedButton(
                 color: Colors.amberAccent,
                 child: Row(
                   children: <Widget> [
                     Icon(Icons.update),
-                    SizedBox(width: 5.0,),
+                    SizedBox(
+                      width: 5.0,
+                    ),
                     Text("Güncelle"),
                   ],
                 ),
                 onPressed: () {
-                  var mesaj = "Güncellendi";
-                  mesajGoster(context, mesaj);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentEdit(selectedStudent)));
                 },
               ),
             ),
             Flexible(
               fit: FlexFit.tight,
               flex: 1,
-              // ignore: deprecated_member_use
               child: RaisedButton(
                 color: Colors.redAccent,
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.delete),
-                    SizedBox(width: 5.0,),
+                    SizedBox(
+                      width: 5.0,
+                    ),
                     Text("Sil"),
                   ],
                 ),
